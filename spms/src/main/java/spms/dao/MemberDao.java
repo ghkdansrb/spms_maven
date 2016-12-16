@@ -7,19 +7,37 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import spms.vo.Member;
 
 public class MemberDao {
 	Connection connection;
-	int rowCount = 0;
+	
 	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 	
+	public int delete(int no) throws Exception {
+		Statement stmt = null;
+		int rowCount = 0;
+		try {
+  			stmt = connection.createStatement();
+			stmt.executeUpdate(
+					"DELETE FROM MEMBERS WHERE MNO=" + 
+					no);
+		} catch (Exception e) {
+			throw e;
+		}finally {
+			try {if (stmt != null) stmt.close();} catch(Exception e) {}
+		}
+
+		return rowCount;
+		
+	}
 	
 	public int insert(Member member) throws Exception{
 		PreparedStatement stmt = null;
-		
+		int rowCount = 0;
 		try{
 			stmt = connection.prepareStatement(
 					"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"
